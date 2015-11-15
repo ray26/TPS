@@ -53,7 +53,7 @@ record_generated_file()
         return
     fi
     local RELATIVE_PATH=${FILE:${#BASE_PATH}+1}
-    local FILE_MD5=`md5sum "$FILE" | awk '{print $1}'`
+    local FILE_MD5=`md5 "$FILE" | awk '{print $1}'`
     local EXIST_LINE=`grep "^$RELATIVE_PATH|.*" "$RECORD_FILE" 2>/dev/null`
     if [ -z "$EXIST_LINE" ]; then
         echo "$RELATIVE_PATH|$FILE_MD5" >> "$RECORD_FILE"
@@ -81,7 +81,7 @@ generate_file_list_for_dir()
     for FILE in `find "$DIR_PATH"`
     do
         if [ -f "$FILE" -a ! -L "$FILE" ]; then
-            FILE_MD5=`md5sum "$FILE" | awk '{print $1}'`
+            FILE_MD5=`md5 "$FILE" | awk '{print $1}'`
             FILE=${FILE:${#BASE_PATH}}
             if [ ${FILE:0:1} = "/" ]; then
                 FILE=${FILE:1}
@@ -457,10 +457,10 @@ merge_single_file()
         # replace original method definition
         local ORIG_METHOD_DEFINE_ESCAPED=`pattern_escape "$ORIG_METHOD_DEFINE"`
         local METHOD_DEFINE_ESCAPED=`pattern_escape "$METHOD_DEFINE"`
-        local MD5_BEFORE=`md5sum "$TARGET_FILE" | awk '{print $1}'`
+        local MD5_BEFORE=`md5 "$TARGET_FILE" | awk '{print $1}'`
         # only replace the method definition, add a space ahead
         sed -i "s# $ORIG_METHOD_DEFINE_ESCAPED# $METHOD_DEFINE_ESCAPED#" "$TARGET_FILE"
-        local MD5_AFTER=`md5sum "$TARGET_FILE" | awk '{print $1}'`
+        local MD5_AFTER=`md5 "$TARGET_FILE" | awk '{print $1}'`
         if [ "$MD5_BEFORE" == "$MD5_AFTER" ]; then
             echo "fail."
             echo "[ERROR] replace $METHOD_DEFINE failed"
@@ -593,7 +593,7 @@ merge_single_file()
         
         # add tos_xxx_init to the end of the original constructor
         # find invoke position of tos_xxx_init
-        local MD5_BEFORE=`md5sum "$TARGET_FILE" | awk '{print $1}'`
+        local MD5_BEFORE=`md5 "$TARGET_FILE" | awk '{print $1}'`
         for INVOKE_LINE in `grep -n "invoke\-.*\->$TOS_METHOD_NAME$METHOD_SIGNATURE" "$TOS_FILE"`
         do
             LINE_NUM=`echo "$INVOKE_LINE" | cut -d':' -f1`
@@ -653,7 +653,7 @@ merge_single_file()
                 ((LINE_NUM--))
             done
         done
-        local MD5_AFTER=`md5sum "$TARGET_FILE" | awk '{print $1}'`
+        local MD5_AFTER=`md5 "$TARGET_FILE" | awk '{print $1}'`
         if [ "$MD5_BEFORE" == "$MD5_AFTER" ]; then
             echo "fail."
             echo "[ERROR] add $TOS_METHOD_SIGNATURE invoke failed"
