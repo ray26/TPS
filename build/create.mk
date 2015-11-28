@@ -21,8 +21,8 @@ else
 	$(hide) mkdir -p $(PORT_DEVICE)/$(DEVICE)/override/SYSTEM
 	$(hide)	if [ ! -f $(PORT_DEVICE)/$(DEVICE)/Makefile ]; then \
 		cp -f $(PORT_CONFIG)/device_mk.template $(PORT_DEVICE)/$(DEVICE)/Makefile; \
-		sed -i 's/samsung/$(BRAND)/' $(PORT_DEVICE)/$(DEVICE)/Makefile; \
-		sed -i 's/GT-I9500/$(DEVICE)/' $(PORT_DEVICE)/$(DEVICE)/Makefile; \
+		gsed -i 's/samsung/$(BRAND)/' $(PORT_DEVICE)/$(DEVICE)/Makefile; \
+		gsed -i 's/GT-I9500/$(DEVICE)/' $(PORT_DEVICE)/$(DEVICE)/Makefile; \
 	    fi
 	$(hide) if [ ! -f $(PORT_DEVICE)/$(DEVICE)/config/build.prop ]; then \
 		cp -f $(PORT_CONFIG)/build.prop $(PORT_DEVICE)/$(DEVICE)/config/; \
@@ -37,8 +37,8 @@ else
 		cp -f $(PORT_CONFIG)/tos_system_files.ignore $(PORT_DEVICE)/$(DEVICE)/config/; \
 	    fi
 	$(hide) if [ $(DEVICE) = "tos" ]; then \
-		sed -i 's/\(DECOMPILE_PACKAGES.*\)/\1 framework-qrom.jar/' $(PORT_DEVICE)/$(DEVICE)/Makefile; \
-		sed -i 's/CUSTOM_RESOURCE_PACKAGE := none/CUSTOM_RESOURCE_PACKAGE := framework-qrom-res.apk/' $(PORT_DEVICE)/$(DEVICE)/Makefile; \
+		gsed -i 's/\(DECOMPILE_PACKAGES.*\)/\1 framework-qrom.jar/' $(PORT_DEVICE)/$(DEVICE)/Makefile; \
+		gsed -i 's/CUSTOM_RESOURCE_PACKAGE := none/CUSTOM_RESOURCE_PACKAGE := framework-qrom-res.apk/' $(PORT_DEVICE)/$(DEVICE)/Makefile; \
 	    fi
 	@echo "device '$(DEVICE)' directory tree created"
 	@echo "now you should copy or link the ota package as 'ota.zip' into '$(PORT_DEVICE)/$(DEVICE)' directory and then execute make command"
