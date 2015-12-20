@@ -74,8 +74,8 @@ define unzip_ota
 				echo "[ERROR] unzip ota.zip failed"; \
 				exit 1; \
 			fi; \
-			md5sum $(DEVICE_ROOT)/ota.zip | awk '{print $$1}' > $(DEVICE_ROOT)/ota/ota.zip.checksum; \
-			sed -i "s/KOT49H.I9500ZSUDNK1/`grep ro.build.display.id $(DEVICE_ROOT)/ota/system/build.prop | cut -d'=' -f2`/" $(DEVICE_ROOT)/Makefile; \
+			md5 $(DEVICE_ROOT)/ota.zip | awk '{print $$1}' > $(DEVICE_ROOT)/ota/ota.zip.checksum; \
+			gsed -i "s/KOT49H.I9500ZSUDNK1/`grep ro.build.display.id $(DEVICE_ROOT)/ota/system/build.prop | cut -d'=' -f2`/" $(DEVICE_ROOT)/Makefile; \
 			touch $(DEVICE_ROOT)/progress/$(PROG_UNZIP_OTA); \
 	    fi
 	$(hide) $(call ignore_record_file,"$(DEVICE_ROOT)/ota")
@@ -197,7 +197,7 @@ define check_ota_changed
     $(hide) OTA_CHANGED=true;\
             if [ -f $(DEVICE_ROOT)/ota.zip -a -f $(DEVICE_ROOT)/ota/ota.zip.checksum ]; then \
                 OLD_OTA_CHECKSUM=`cat $(DEVICE_ROOT)/ota/ota.zip.checksum`; \
-                NEW_OTA_CHECKSUM=`md5sum $(DEVICE_ROOT)/ota.zip | awk '{print $$1}'`; \
+                NEW_OTA_CHECKSUM=`md5 $(DEVICE_ROOT)/ota.zip | awk '{print $$1}'`; \
                 if [ $$OLD_OTA_CHECKSUM = $$NEW_OTA_CHECKSUM ]; then \
                     OTA_CHANGED=false; \
                 fi; \
